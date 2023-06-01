@@ -21,6 +21,4 @@ _The `-s` is shorthand for `--store`. It should be noted that `.myshopify.com` i
  
 If working out of the the customizer and need to save updated sections use:
  
-`shopify theme dev -e -s store-name`
- 
-_The `-e` is shorthand for `--environment` and works if you create different environments. If we set up different environments you might need to use `--theme-editor-sync` instead but by default without environments set, `-e` will save._
+`shopify theme dev --theme-editor-sync -s store-name`
