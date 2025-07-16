@@ -27,6 +27,14 @@ If working out of the the customizer and need to save updated sections use:
 
 `shopify theme dev --theme-editor-sync -s store-name`
 
+If you're using the `shopify.theme.toml` file (and ya should) then you can just run
+
+`shopify theme dev -e dev`
+
+each time and not have any sort of issues remembering the store handle as it will be passed in with the environment. Passing in other flags, like the `--theme-editor-sync` need to be passed in before the environment to avoid clashes
+
+`shopify theme dev --theme-editor-sync -e dev`
+
 ## Changelog
 
 ### v1.0.0 - YYYY-MM-DD
