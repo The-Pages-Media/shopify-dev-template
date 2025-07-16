@@ -1,0 +1,2 @@
+[environments.dev]
+store = "store-handle"

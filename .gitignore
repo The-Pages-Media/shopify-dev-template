@@ -1,1 +1,10 @@
+# General
 *.mp4
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# Shopify
+.shopify
