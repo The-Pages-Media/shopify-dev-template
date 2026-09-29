@@ -1,0 +1,32 @@
+# Theme Check config for CI (.github/workflows/theme-check.yml) and local runs
+#
+# CI fails on error-level offenses only. On the first pull, measure the
+# inherited baseline (docs/theme-onboarding.md step 4) and record it below so
+# the required check stays green on the legacy tree and fails only on NEW
+# breakage:
+#
+#   - prefer file-scoped `ignore` lists per check — they keep the check LIVE
+#     for every other file (a new Liquid syntax error in a new section still
+#     fails CI);
+#   - demote a check to `severity: warning` only when its offenses are spread
+#     across the whole tree (typically MatchingTranslations in locales/).
+#
+# Do not add to these lists to get a PR green — fix the offense, or surface it
+# in the PR. Removing an entry once its file is fixed is welcome.
+#
+# TODO(discovery): baseline measured YYYY-MM-DD with Shopify CLI x.y.z —
+# N files, N errors / N warnings.
+extends: theme-check:recommended
+
+ignore:
+  - docs/**
+  - node_modules/**
+
+# Example shapes (delete once the real baseline is recorded):
+#
+# MatchingTranslations:
+#   severity: warning
+#
+# LiquidSyntaxError:
+#   ignore:
+#     - snippets/vendor-file-with-filter-in-render-args.liquid

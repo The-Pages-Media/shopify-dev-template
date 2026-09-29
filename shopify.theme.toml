@@ -1,2 +1,9 @@
-[environments.dev]
+# Production store: day-to-day work. `shopify theme dev -e prod` serves a
+# temporary development theme on this store; it never touches the live theme.
+[environments.prod]
 store = "store-handle"
+
+# Client dev store (recommended): prototype metaobject/metafield definitions,
+# custom data schemes, and admin flows here before creating them on prod.
+[environments.dev]
+store = "store-handle-dev"

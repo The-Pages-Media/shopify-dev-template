@@ -1,0 +1,71 @@
+# PR guard: release PRs must carry a versioned changelog entry (docs/development-workflow.md)
+# For PRs into main from release branches (development, release/*, hotfix/*):
+#   - the top `### vX.Y.Z` entry in the README.md Changelog must be a new,
+#     not-yet-tagged version, so the merge always produces a release
+#     (release.yml);
+#   - no `### Unreleased` heading may remain (feature branches accumulate
+#     notes there; the release PR renames it to the version);
+#   - `theme_version` in config/settings_schema.json must equal that version.
+# Other PRs into main skip the check automatically, and any PR can opt out
+# with the `no-release` label.
+name: Changelog check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  changelog-check:
+    name: changelog-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Require a new changelog version on release branches
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+          NO_RELEASE: ${{ contains(github.event.pull_request.labels.*.name, 'no-release') }}
+        run: |
+          set -euo pipefail
+
+          if [ "$NO_RELEASE" = "true" ]; then
+            echo "PR is labeled no-release — skipping changelog check."
+            exit 0
+          fi
+
+          case "$HEAD_REF" in
+            development|release/*|hotfix/*) ;;
+            *)
+              echo "Head branch '$HEAD_REF' is not a release branch (development, release/*, hotfix/*) — skipping."
+              exit 0
+              ;;
+          esac
+
+          if grep -qE '^### Unreleased' README.md; then
+            echo "::error file=README.md::An '### Unreleased' heading is still present. Rename it to '### vX.Y.Z - YYYY-MM-DD' before merging to main (docs/development-workflow.md step 8)."
+            exit 1
+          fi
+
+          version="$(sed -nE 's/^### (v[0-9]+\.[0-9]+\.[0-9]+).*/\1/p' README.md | head -1)"
+          if [ -z "$version" ]; then
+            echo "::error file=README.md::No '### vX.Y.Z' heading found in the README.md Changelog."
+            exit 1
+          fi
+
+          if git ls-remote --exit-code origin "refs/tags/$version" >/dev/null 2>&1; then
+            echo "::error file=README.md::Top changelog version $version is already released. Add a new version entry (patch for fixes, minor for features) before merging to main, or label the PR no-release."
+            exit 1
+          fi
+
+          # settings_schema.json may carry Shopify-tolerated trailing commas, so
+          # strict JSON parsers can choke on it — sed the field out instead.
+          schema_version="$(sed -nE 's/^[[:space:]]*"theme_version":[[:space:]]*"([0-9]+\.[0-9]+\.[0-9]+)".*/\1/p' config/settings_schema.json | head -1)"
+          if [ "v$schema_version" != "$version" ]; then
+            echo "::error file=config/settings_schema.json::theme_version is '$schema_version' but the top README changelog entry is '$version'. Bump theme_version to '${version#v}' — the two must always match (docs/development-workflow.md step 8)."
+            exit 1
+          fi
+
+          echo "OK — $version (changelog + theme_version agree) will be released when this PR merges."

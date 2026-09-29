@@ -2,6 +2,7 @@
 *.mp4
 .env
 .env.*
+node_modules/
 
 # macOS
 .DS_Store
