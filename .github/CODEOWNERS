@@ -1,4 +1,4 @@
-# MARK:- Code ownership for structural/governance paths (docs/development-workflow.md)
+# Code ownership for structural/governance paths (docs/development-workflow.md)
 #
 # Owners listed here are automatically requested for review on every PR that
 # touches these paths. On GitHub Free this is a request, not a requirement;

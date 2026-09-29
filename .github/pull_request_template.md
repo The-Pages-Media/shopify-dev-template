@@ -1,5 +1,3 @@
-<!-- MARK:- PR template enforcing docs/development-workflow.md -->
-
 ## Task
 
 <!-- Issue / Basecamp task / brief this PR delivers. `Closes #123` when there is an issue. -->

@@ -1,4 +1,4 @@
-# MARK:- CI guardrail: Shopify theme check on every PR (docs/development-workflow.md)
+# CI guardrail: Shopify theme check on every PR (docs/development-workflow.md)
 # Catches Liquid syntax errors before a merge to main deploys them to the live
 # theme. Fails on error-level offenses only; checks carrying pre-existing
 # inherited errors are demoted to warnings in .theme-check.yml so this stays

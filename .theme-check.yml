@@ -1,4 +1,4 @@
-# MARK:- Theme Check config for CI (.github/workflows/theme-check.yml) and local runs
+# Theme Check config for CI (.github/workflows/theme-check.yml) and local runs
 #
 # CI fails on error-level offenses only. On the first pull, measure the
 # inherited baseline (docs/theme-onboarding.md step 4) and record it below so

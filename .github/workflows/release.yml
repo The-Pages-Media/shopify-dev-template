@@ -1,4 +1,4 @@
-# MARK:- Automated release: tag + GitHub Release on merge to main (docs/development-workflow.md)
+# Automated release: tag + GitHub Release on merge to main (docs/development-workflow.md)
 # When a PR merges into main, read the top entry of the README.md Changelog
 # (`### vX.Y.Z - YYYY-MM-DD`) and, if that version has no tag yet, create the
 # tag + GitHub Release with that changelog section as the notes. Merges that

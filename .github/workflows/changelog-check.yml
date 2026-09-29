@@ -1,4 +1,4 @@
-# MARK:- PR guard: release PRs must carry a versioned changelog entry (docs/development-workflow.md)
+# PR guard: release PRs must carry a versioned changelog entry (docs/development-workflow.md)
 # For PRs into main from release branches (development, release/*, hotfix/*):
 #   - the top `### vX.Y.Z` entry in the README.md Changelog must be a new,
 #     not-yet-tagged version, so the merge always produces a release

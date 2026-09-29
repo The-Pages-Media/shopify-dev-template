@@ -25,7 +25,7 @@ These apply to every task in this repo:
    - **Accessibility:** semantic elements, ARIA only where HTML falls short, full keyboard support, visible `:focus-visible` states, announced state changes (`aria-live`), touch targets at least 44×44px, text alternatives for images, and `| t` strings for UI copy.
    - **Performance:** no render-blocking additions, `defer` on every script, `loading="lazy"` plus `width`/`height` on below-the-fold images (CLS), `IntersectionObserver` before fetching below-the-fold content, animate `transform`/`opacity` only, and a `prefers-reduced-motion` guard on any motion. Assets load only on the templates that use them.
    - Most vendor themes have a thin baseline on focus states and reduced motion. New code must beat it, not match it.
-8. **Mark all custom code with `MARK:-`.** Every piece of code we add or modify gets a comment starting with `MARK:-` so custom work is greppable later:
+8. **Mark all custom code with `MARK:-`.** Every piece of theme code we add or modify gets a comment starting with `MARK:-`, so our work stands out from the vendor's and is greppable later. It applies to theme files only (`layout/`, `sections/`, `snippets/`, `blocks/`, `templates/`, `assets/`, `config/`). Never add `MARK:-` to repo tooling or docs (`docs/`, `.github/`, `CLAUDE.md`, `AGENTS.md`, `.theme-check.yml`), because that clutters the grep results:
    - Liquid, single line: `{% # MARK:- Description of the customization %}`
    - Liquid, multi-line: `{% comment %} MARK:- Description … {% endcomment %}` (Liquid's own convention for block comments; `MARK:-` stays first so the grep still finds it)
    - Inside a `{% liquid %}` block: `# MARK:- ...` as a line
