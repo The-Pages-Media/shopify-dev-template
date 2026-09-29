@@ -21,13 +21,24 @@ It is recommended for this project to use Shopify CLI
 
 ## Get Started
 
-Set the store handle in `shopify.theme.toml` (no `.myshopify.com` needed), then run with the environment:
+`shopify.theme.toml` defines two environments (store handles only, no `.myshopify.com` needed):
 
-`shopify theme dev -e dev`
+| Environment | Store | Use it for |
+|---|---|---|
+| `prod` | [store-handle].myshopify.com | Day-to-day theme development against real products, collections, and content |
+| `dev` | [store-handle-dev].myshopify.com | The client dev store: prototyping metaobject/metafield definitions, custom data schemes, and admin flows before creating them on prod |
+
+Day-to-day work runs against production. `shopify theme dev` serves a temporary development theme, so the live theme is never touched:
+
+`shopify theme dev -e prod`
 
 If working out of the customizer and needing to save updated sections, pass flags before the environment to avoid clashes:
 
-`shopify theme dev --theme-editor-sync -e dev`
+`shopify theme dev --theme-editor-sync -e prod`
+
+Use the client dev store when a feature needs new store data:
+
+`shopify theme dev -e dev`
 
 ## Workflow
 

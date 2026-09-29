@@ -1,6 +1,6 @@
 # [Feature name] — setup guide
 
-<!-- Copy to docs/<feature>-setup.md. Audience: the merchant. Plain language, admin paths in bold, exact keys in code. Delete this comment. -->
+<!-- Copy to docs/<feature>-setup.md. Audience: the merchant. Plain language, admin paths in bold, exact keys in code. Write it from the setup that worked on the client dev store, then follow it on prod to confirm it (docs/development-workflow.md, Stores and environments). Delete this comment. -->
 
 One or two sentences: what the feature does for customers, where it shows up, and what the merchant controls.
 

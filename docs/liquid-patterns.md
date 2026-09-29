@@ -146,7 +146,7 @@ TODO(discovery): every namespace found above.
 |---|---|---|
 | `product.metafields.custom.*` | … | `file:line` |
 
-Access pattern: assign at the top, `.value` on reference/list types, guard with `!= blank`. New custom data goes in a store-appropriate namespace (not the vendor's), and comes with a merchant setup guide in `docs/<feature>-setup.md` (see `docs/_feature-setup-template.md`). Definitions are store data: the theme can't create them, so the guide has to walk the merchant through creating them.
+Access pattern: assign at the top, `.value` on reference/list types, guard with `!= blank`. New custom data goes in a store-appropriate namespace (not the vendor's), and comes with a merchant setup guide in `docs/<feature>-setup.md` (see `docs/_feature-setup-template.md`). Definitions are store data: the theme can't create them, so the guide has to walk the merchant through creating them. Prototype new definitions on the client dev store (`-e dev`) before creating them on prod.
 
 ## `layout/theme.liquid` map
 

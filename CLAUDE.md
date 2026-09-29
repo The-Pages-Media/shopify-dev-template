@@ -87,7 +87,7 @@ TODO(discovery): values from `config/settings_data.json` (`current`). Always con
 
 ## Workflow
 
-- Develop with Shopify CLI: `shopify theme dev -e dev` (uses `shopify.theme.toml`)
+- Develop with Shopify CLI: `shopify theme dev -e prod` for day-to-day work (a temporary development theme on the production store; the live theme is untouched). `shopify theme dev -e dev` targets the client dev store, where new metaobject/metafield definitions and admin flows are prototyped before they're created on prod. See [docs/development-workflow.md](docs/development-workflow.md#stores-and-environments).
 - **All work happens on `feature/*` branches off `development`, delivered by pull request into `development`. Never commit to `main` or `development` directly.** `main` deploys to the live theme on merge and creates a tagged release from the README changelog. See [docs/development-workflow.md](docs/development-workflow.md).
 - Every PR adds an `### Unreleased` changelog entry to `README.md`; the release PR assigns the version and bumps `theme_version` in `config/settings_schema.json`.
 - Test on mobile and desktop viewports; check the browser console for errors before calling anything done

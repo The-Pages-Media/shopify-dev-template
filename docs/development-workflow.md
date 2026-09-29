@@ -126,11 +126,28 @@ Every change leaves a trail that a developer and the merchant can each read with
 
 ---
 
+## Stores and environments
+
+`shopify.theme.toml` defines two environments:
+
+| Environment | Store | Purpose |
+|---|---|---|
+| `prod` | The production store | **Day-to-day theme development.** `shopify theme dev -e prod` serves a temporary development theme against real products, collections, and content. It never touches the live theme or the GitHub-connected themes. |
+| `dev` | The client dev store | **Store-data prototyping.** Metaobject and metafield definitions, custom data schemes, and admin flows are built and tested here first. |
+
+**Why a client dev store is best practice:** a theme change is reversible through Git, but store data isn't. Metaobject definitions, metafield definitions, their keys and types, and the entries merchants fill in live in the store, not the repo. Creating them on prod while the design is still changing leaves renamed fields, orphaned definitions, and half-filled entries in the merchant's admin. So for any feature that needs new custom data:
+
+1. Build the definitions and a few entries on the dev store, and develop the theme code against it (`shopify theme dev -e dev`).
+2. Write the merchant setup guide (`docs/<feature>-setup.md`) from what actually worked there, with exact names, keys, and types.
+3. Create the definitions on prod by following that guide, then QA on the `development` theme as usual. Following the guide on prod is the test of the guide.
+
+Theme-only changes (markup, CSS, JS against existing data) can go straight to `-e prod`.
+
 ## Preview themes and the GitHub integration
 
 The Shopify GitHub integration can connect **any** branch to a development theme, and it writes theme-editor changes back to that branch as `shopify[bot]` "Update from Shopify" commits. That's useful for QA and dangerous for hygiene:
 
-- **Prefer `shopify theme dev`** (`shopify theme dev -e dev`, or `--theme-editor-sync` when you need to save editor changes) for day-to-day work. Nothing is written to Git without you.
+- **Prefer `shopify theme dev`** (`shopify theme dev -e prod`, or `--theme-editor-sync` when you need to save editor changes) for day-to-day work. Nothing is written to Git without you.
 - If you connect a feature branch to a development theme for QA, **every setting you touch in that theme editor becomes a commit on your branch.** Only make editor changes that belong to the feature. Never use a connected preview theme for unrelated content edits (product swaps, copy changes), because they'll ship with the feature.
 - Bot commits on a feature branch are noise in review. Keep them minimal, call out any intentional ones in the PR description, and never describe settings changes as excluded when the branch history shows otherwise.
 - Shopify is a QA surface, not a transport layer. Code moves between people through Git and PRs, never through theme pulls.

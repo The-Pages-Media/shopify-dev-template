@@ -11,8 +11,8 @@ Run this once, when we take on a theme we haven't worked in. It turns the starte
 ## 1. Bootstrap the repo
 
 1. Create the client repo from this template (keep `CLAUDE.md`, `AGENTS.md`, `docs/`, `.github/`, `.theme-check.yml`, `.shopifyignore`, `.gitignore`, `shopify.theme.toml`, `README.md`).
-2. Set the store handle in `shopify.theme.toml` and replace the placeholders in `README.md` (store name, domain, preview URL).
-3. Pull the live theme into the repo root: `shopify theme pull -e dev --live`. This is the one time we pull code from Shopify into Git. After this, code only moves through Git.
+2. Set the store handles in `shopify.theme.toml` (`prod`, plus `dev` if the client has a dev store; see section 2, item 4) and replace the placeholders in `README.md` (store name, domain, preview URL).
+3. Pull the live theme into the repo root: `shopify theme pull -e prod --live`. This is the one time we pull code from Shopify into Git. After this, code only moves through Git.
 4. **Record the vendor theme name and version now**, in `CLAUDE.md`, from `config/settings_schema.json` (`theme_info`) and anything like `themeName`/`themeVersion` in `layout/theme.liquid`. Step 5 overwrites `theme_version` with our release number, so this is the last chance to read the vendor's from that file.
 5. Set `theme_version` in `config/settings_schema.json` to `1.0.0` and make sure the README changelog's top entry is `### v1.0.0 - YYYY-MM-DD`. From here on, those two numbers always match (see `docs/development-workflow.md` step 8).
 6. Commit to `main` as the initial import ("Initial import of <Theme> vX.Y.Z from the live theme") and push. Create `development` from `main` and push it. This bootstrap is the only direct commit to `main`; the "no direct commits" rule applies from the next commit on.
@@ -22,7 +22,8 @@ Run this once, when we take on a theme we haven't worked in. It turns the starte
 1. In the Shopify admin, **Online Store → Themes → Add theme → Connect from GitHub**: connect `main`. Shopify creates a new theme from the branch and does not replace the live one.
 2. Compare that theme with the live theme in preview. If the merchant edited content since the pull, pull those changes into `main` before continuing. At an agreed time, **publish the `main`-connected theme**. From then on, a merge into `main` is a deploy, and the merchant's theme-editor edits come back as `shopify[bot]` commits.
 3. Connect `development` to a second theme named `[DEV-TR] Development theme` (or the store's naming) for QA.
-4. If the store can't work this way (for example, the merchant won't let us publish a connected theme yet), write down the actual deploy path in `docs/development-workflow.md` and `CLAUDE.md` before any feature work.
+4. **Set up a client dev store (recommended).** Create a development store for the client (Partner Dashboard → Stores → Add store → development store), add its handle under `[environments.dev]`, and seed it with a few representative products and collections. This is where we try out metaobject and metafield definitions, custom data schemes, and admin flows before creating them on prod. If the client doesn't have one yet, write that down in `CLAUDE.md` and raise it as a recommendation.
+5. If the store can't work this way (for example, the merchant won't let us publish a connected theme yet), write down the actual deploy path in `docs/development-workflow.md` and `CLAUDE.md` before any feature work.
 
 ## 3. Wire up GitHub
 
