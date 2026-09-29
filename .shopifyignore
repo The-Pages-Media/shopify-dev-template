@@ -1,2 +1,7 @@
 README.md
 .gitignore
+.theme-check.yml
+CLAUDE.md
+AGENTS.md
+docs/
+.github/

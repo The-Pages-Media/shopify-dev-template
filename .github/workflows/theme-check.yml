@@ -1,0 +1,31 @@
+# MARK:- CI guardrail: Shopify theme check on every PR (docs/development-workflow.md)
+# Catches Liquid syntax errors before a merge to main deploys them to the live
+# theme. Fails on error-level offenses only; checks carrying pre-existing
+# inherited errors are demoted to warnings in .theme-check.yml so this stays
+# green on the current tree and fails only on NEW breakage.
+# On GitHub Free this check is visible but not blocking; once the org is on
+# GitHub Team it is listed as required in .github/rulesets/branch-protection.json.
+name: Theme Check
+
+on:
+  pull_request:
+    branches: [main, development]
+  push:
+    branches: [main, development]
+
+jobs:
+  theme-check:
+    name: theme-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli@latest
+
+      - name: Run theme check
+        run: shopify theme check --fail-level error

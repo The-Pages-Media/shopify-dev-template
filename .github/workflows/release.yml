@@ -1,0 +1,79 @@
+# MARK:- Automated release: tag + GitHub Release on merge to main (docs/development-workflow.md)
+# When a PR merges into main, read the top entry of the README.md Changelog
+# (`### vX.Y.Z - YYYY-MM-DD`) and, if that version has no tag yet, create the
+# tag + GitHub Release with that changelog section as the notes. Merges that
+# don't bump the version exit quietly without creating anything.
+#
+# Trigger is merged-PR (not push) deliberately: main is connected to the live
+# theme via the Shopify GitHub integration, which commits merchant content
+# directly to the branch — a push trigger would fire on every write-back;
+# this fires only on intentional merges. workflow_dispatch exists for manual
+# reruns and the one-time backfill of an untagged version.
+#
+# The README changelog version and `theme_version` in
+# config/settings_schema.json are a paired version bumped together in every
+# release PR — changelog-check.yml enforces the match pre-merge, and this
+# workflow warns (but still releases) if a mismatch slips through.
+name: Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # Merged PRs only — closing without merging is a no-op.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Create release from README changelog
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Empty on workflow_dispatch — falls back to main HEAD below.
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          set -euo pipefail
+
+          version="$(sed -nE 's/^### (v[0-9]+\.[0-9]+\.[0-9]+).*/\1/p' README.md | head -1)"
+          if [ -z "$version" ]; then
+            echo "No '### vX.Y.Z' heading found in README.md Changelog — nothing to release."
+            exit 0
+          fi
+
+          if git ls-remote --exit-code origin "refs/tags/$version" >/dev/null 2>&1; then
+            echo "Tag $version already exists — no new version in this merge."
+            exit 0
+          fi
+
+          # Paired-version sanity check (enforced pre-merge by changelog-check;
+          # warn-only here so a slip-through still gets its release).
+          schema_version="$(sed -nE 's/^[[:space:]]*"theme_version":[[:space:]]*"([0-9]+\.[0-9]+\.[0-9]+)".*/\1/p' config/settings_schema.json | head -1)"
+          if [ "v$schema_version" != "$version" ]; then
+            echo "::warning file=config/settings_schema.json::theme_version '$schema_version' does not match released version '$version' — fix in the next PR."
+          fi
+
+          target="${MERGE_SHA:-$(git rev-parse HEAD)}"
+
+          # Release notes = the top changelog section (between the first two
+          # version headings), heading line excluded.
+          awk '/^### v[0-9]+\./ { n++; next } n == 1' README.md > "$RUNNER_TEMP/notes.md"
+
+          gh release create "$version" \
+            --title "$version" \
+            --target "$target" \
+            --notes-file "$RUNNER_TEMP/notes.md"
+
+          echo "Created release $version at $target."

@@ -1,0 +1,20 @@
+# MARK:- Code ownership for structural/governance paths (docs/development-workflow.md)
+#
+# Owners listed here are automatically requested for review on every PR that
+# touches these paths. On GitHub Free this is a request, not a requirement;
+# once the org is on GitHub Team and .github/rulesets/branch-protection.json
+# is imported with "require code owner review", their approval becomes
+# mandatory.
+
+# Structural theme files — layout, settings, token system
+# TODO(discovery): point the token lines at this theme's variable/font snippets
+/layout/                            @tpage99
+/config/                            @tpage99
+/snippets/css-variables.liquid      @tpage99
+
+# Governance — conventions, workflow rules, agent rules, CI
+/docs/                              @tpage99
+CLAUDE.md                           @tpage99
+AGENTS.md                           @tpage99
+/.github/                           @tpage99
+/.theme-check.yml                   @tpage99
